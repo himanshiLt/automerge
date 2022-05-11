@@ -2,7 +2,9 @@
 framework: mocha
 preRun:
      command:
-        - yarn install
+        - yarn
+        - yarn lint
+        - yarn build
 preMerge:
   pattern:
     - "./test/*_test.js"
