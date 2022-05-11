@@ -7,11 +7,14 @@ preRun:
         - yarn build
 preMerge:
   pattern:
-    - test/*_test.js
+    - 'test/*test*.js'
+    - 'test/*test*.ts'
 postMerge:
   pattern: 
-    - test/*_test.js
+    - 'test/*test*.js'
+    - 'test/*test*.ts'
 postRun:
      command:
         - yarn --version
+configFile: .mocharc.yaml
 version: 1.0
