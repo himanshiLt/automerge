@@ -5,12 +5,6 @@ declare module 'automerge' {
    */
   type Doc<T> = FreezeObject<T>
 
-  /**
-   * The argument pased to the callback of a `change` function is a mutable proxy of the original
-   * type. `Proxy<D>` is the inverse of `Doc<T>`: `Proxy<Doc<T>>` is `T`, and `Doc<Proxy<D>>` is `D`.
-   */
-  type Proxy<D> = D extends Doc<infer T> ? T : never
-
   type ChangeFn<T> = (doc: T) => void
 
   // Automerge.* functions
@@ -47,8 +41,8 @@ declare module 'automerge' {
 
   function merge<T>(localdoc: Doc<T>, remotedoc: Doc<T>): Doc<T>
 
-  function change<D, T = Proxy<D>>(doc: D, options: ChangeOptions<T>, callback: ChangeFn<T>): D
-  function change<D, T = Proxy<D>>(doc: D, callback: ChangeFn<T>): D
+  function change<T>(doc: Doc<T>, options: ChangeOptions<T>, callback: ChangeFn<T>): Doc<T>
+  function change<T>(doc: Doc<T>, callback: ChangeFn<T>): Doc<T>
   function emptyChange<D extends Doc<any>>(doc: D, options?: ChangeOptions<D>): D
   function applyChanges<T>(doc: Doc<T>, changes: BinaryChange[]): [Doc<T>, Patch]
   function equals<T>(val1: T, val2: T): boolean
@@ -59,7 +53,7 @@ declare module 'automerge' {
   function getAllChanges<T>(doc: Doc<T>): BinaryChange[]
   function getChanges<T>(olddoc: Doc<T>, newdoc: Doc<T>): BinaryChange[]
   function getConflicts<T>(doc: Doc<T>, key: keyof T): any
-  function getHistory<D, T = Proxy<D>>(doc: Doc<T>): State<T>[]
+  function getHistory<T>(doc: Doc<T>): State<T>[]
   function getLastLocalChange<T>(doc: Doc<T>): BinaryChange
   function getObjectById<T>(doc: Doc<T>, objectId: OpId): any
   function getObjectId(object: any): OpId
@@ -127,8 +121,8 @@ declare module 'automerge' {
 
   namespace Frontend {
     function applyPatch<T>(doc: Doc<T>, patch: Patch, backendState?: BackendState): Doc<T>
-    function change<D, T = Proxy<D>>(doc: D, message: string | undefined, callback: ChangeFn<T>): [D, Change]
-    function change<D, T = Proxy<D>>(doc: D, callback: ChangeFn<T>): [D, Change]
+    function change<T>(doc: Doc<T>, message: string | undefined, callback: ChangeFn<T>): [Doc<T>, Change]
+    function change<T>(doc: Doc<T>, callback: ChangeFn<T>): [Doc<T>, Change]
     function emptyChange<T>(doc: Doc<T>, message?: string): [Doc<T>, Change]
     function from<T>(initialState: T | Doc<T>, options?: InitOptions<T>): [Doc<T>, Change]
     function getActorId<T>(doc: Doc<T>): string
