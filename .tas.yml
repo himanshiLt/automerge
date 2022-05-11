@@ -7,10 +7,12 @@ preRun:
         - yarn build
 preMerge:
   pattern:
-    - "./test/*_test.js"
+    - "./test/*.js"
+    - "./test/*.ts"
 postMerge:
   pattern: 
-    - "./test/*_test.js"
+    - "./test/*.js"
+    - "./test/*.ts"
 postRun:
      command:
         - yarn --version
